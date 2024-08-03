@@ -3,6 +3,7 @@ public enum LevelState
 {
     Init,
     Memorize,
+    Starting,
     Start,
     Complete,
 }

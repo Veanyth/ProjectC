@@ -8,6 +8,11 @@ public class CardsManager : MonoBehaviour
 
     private Dictionary<int, Card> CardsDict = new Dictionary<int, Card>();
 
+    private void Awake()
+    {
+        LevelManager.Instance.OnLevelStateChangedEvent += LevelStateChanged;
+    }
+
     public void GenerateCards(TableManager tableManager)
     {
         _tableManager = tableManager;
@@ -49,5 +54,34 @@ public class CardsManager : MonoBehaviour
         _tableManager.CardHolderDict.RemoveAt(randomIndex); // Remove the spot so it cannot be reused
 
         return randomSpot;
+    }
+
+    private void LevelStateChanged(LevelState levelState)
+    {
+        switch (levelState)
+        {
+            case LevelState.Starting:
+                FlipDownCards();
+                break;
+            case LevelState.Complete:
+                break;
+        }
+    }
+
+    private void FlipDownCards()
+    {
+        StartCoroutine(FlipDownCardsCoroutine()); // Make a delay between each card to flip, for animation purposes
+    }
+
+    private IEnumerator FlipDownCardsCoroutine()
+    {
+        foreach (var card in CardsDict)
+        {
+            card.Value.FlipDown();
+            yield return new WaitForSeconds(0.05f);
+        }
+
+        Debug.Log("Section reached");
+        LevelManager.Instance.ChangeState(LevelState.Start); // When Memorize timer goes off and the animation finishes, the game phase should start
     }
 }

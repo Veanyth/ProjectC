@@ -20,8 +20,14 @@ public class TableManager : MonoBehaviour
         _levelManager = LevelManager.Instance;
         levelSO = _levelManager.Level_SO;
 
+        // Spawn and Adjust the cell size of card Holders and horizontal layouts
         SpawnAndAdjustCellSize();
+
+        // Spawn all the cards that will be used in the game
         cardsManager.GenerateCards(this);
+
+        // After we spawn all cards we are ready to go to the next phase (Memorize)
+        _levelManager.ChangeState(LevelState.Memorize); 
     }
 
     private void SpawnAndAdjustCellSize()

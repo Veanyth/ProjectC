@@ -28,21 +28,45 @@ public class LevelManager : SingletonMB<LevelManager>
             levelSO = _gameManager.CustomLevel;
         else
             levelSO = _gameManager.Levels[_gameManager.CurrentLevelIndex];
-
-        // Spawn and Adjust the cell size of card Holders and horizontal layouts
-       
     }
 
     // We call this method to change the state of the level and trigger the event for any script subscribed to it
-    public void ChangeState(LevelState state)
+    public void ChangeState(LevelState levelState)
     {
-        if (CurrentLevelState == state) return;
+        Debug.Log("Try to change state " + levelState);
+        if (CurrentLevelState == levelState) return;
 
-        CurrentLevelState = state;
+        CurrentLevelState = levelState;
         OnLevelStateChangedEvent?.Invoke(CurrentLevelState);
+
+        switch (levelState)
+        {
+            case LevelState.Memorize:
+                MemorizePhase();
+                break;
+            case LevelState.Start:
+                break;
+            case LevelState.Complete:
+                break;
+        }
+        Debug.Log("State Changed " + levelState);
+
     }
 
-   
+    private void MemorizePhase()
+    {
+        StartCoroutine(MemorizeCountdownCoroutine(levelSO.MemorizeTimer));
+    }
 
+    private IEnumerator MemorizeCountdownCoroutine(float timer)
+    {
+        while (timer > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            timer--;
+        }
+
+        ChangeState(LevelState.Starting); // Start flipping the cards
+    }
 
 }

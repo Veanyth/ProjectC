@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   w: 3
   h: 3
+  memorizeTimer: 2
