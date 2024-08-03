@@ -8,6 +8,8 @@ public class CardsManager : MonoBehaviour
 
     private Dictionary<int, Card> CardsDict = new Dictionary<int, Card>();
 
+    private Card lastClickedCard = null;
+
     private void Awake()
     {
         LevelManager.Instance.OnLevelStateChangedEvent += LevelStateChanged;
@@ -19,15 +21,15 @@ public class CardsManager : MonoBehaviour
 
         // Get the Number of card to spawn, if the grid size is an odd number we need to make it even for the cards to spawn,
         // otherwise we will end up with a card that doesn't have a match
-        int numberOfCardToSpawn = _tableManager.CardHolderDict.Count - _tableManager.CardHolderDict.Count%2;
+        int numberOfCardToSpawn = _tableManager.CardHolderDict.Count - _tableManager.CardHolderDict.Count % 2;
 
         int cardSpawnedFromDB = 0;
         int spawnPairOfSameCard = 0;
 
         for (int i = 0; i < numberOfCardToSpawn; i++)
         {
-            if(spawnPairOfSameCard==2) // Check if we spawned 2 cards of the same type in the grid, if so, we need to
-                                       // reset the pair counter and increament the index to the next card from the DB
+            if (spawnPairOfSameCard == 2) // Check if we spawned 2 cards of the same type in the grid, if so, we need to
+                                          // reset the pair counter and increament the index to the next card from the DB
             {
                 spawnPairOfSameCard = 0;
                 cardSpawnedFromDB++;
@@ -38,7 +40,7 @@ public class CardsManager : MonoBehaviour
             {
                 Card cardTemp = Instantiate(GameManager.Instance.Cards[cardSpawnedFromDB].CardPrefab, randomCardHolderSpot);
                 spawnPairOfSameCard++;
-                cardTemp.Init(i, GameManager.Instance.Cards[cardSpawnedFromDB]);
+                cardTemp.Init(i, GameManager.Instance.Cards[cardSpawnedFromDB], CheckMatchedCards);
                 CardsDict.Add(i, cardTemp);
             }
         }
@@ -63,6 +65,9 @@ public class CardsManager : MonoBehaviour
             case LevelState.Starting:
                 FlipDownCards();
                 break;
+            case LevelState.Start:
+                AllCardsInteractable();
+                break;
             case LevelState.Complete:
                 break;
         }
@@ -80,8 +85,40 @@ public class CardsManager : MonoBehaviour
             card.Value.FlipDown();
             yield return new WaitForSeconds(0.05f);
         }
-
-        Debug.Log("Section reached");
+        yield return new WaitForSeconds(0.5f);
         LevelManager.Instance.ChangeState(LevelState.Start); // When Memorize timer goes off and the animation finishes, the game phase should start
+    }
+
+    private void AllCardsInteractable()
+    {
+        foreach (var card in CardsDict)
+        {
+            card.Value.ChangeInteractability(true);
+        }
+    }
+
+    public void CheckMatchedCards(Card card)
+    {
+        Debug.Log("Check Matched Cards");
+        if (lastClickedCard == null)
+        {
+            lastClickedCard = card;
+            return;
+        }
+
+        if (lastClickedCard.CardTags == card.CardTags)
+        {
+            Debug.Log("Matched");
+            lastClickedCard.CardMatched();
+            card.CardMatched();
+        }
+        else
+        {
+            Debug.Log("Not Matched");
+            lastClickedCard.FlipDownAfterDelay();
+            card.FlipDownAfterDelay();
+        }
+
+        lastClickedCard = null;
     }
 }

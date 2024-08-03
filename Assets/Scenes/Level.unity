@@ -425,7 +425,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8c3de1f2a44fae54ca64209e5e05d8e7, type: 2}
   - {fileID: 11400000, guid: 28d76075993cc214bb197e4eb5878884, type: 2}
   currentLevelIndex: 2
-  customLevelOn: 1
+  customLevelOn: 0
   customLevel: {fileID: 11400000, guid: bba77623f028e0646bbe7dcc6d90e7db, type: 2}
   cards:
   - {fileID: 11400000, guid: bbb620f8789479f4c86051d45e1e4e75, type: 2}
