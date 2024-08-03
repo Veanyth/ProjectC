@@ -17,6 +17,12 @@ public class GameManager : SingletonMB<GameManager>
     [SerializeField] private Level_SO customLevel;
     public Level_SO CustomLevel { get { return customLevel; } }
 
+    [Header("Cards")]
+    [SerializeField] private List<Card_SO> cards = new List<Card_SO>();
+    public List<Card_SO> Cards { get { return cards; } }
+
+    public int CardInDBSize { get { return cards.Count; } }
+
 
     public void ChangeCustomLevelValues(int W,int H)
     {

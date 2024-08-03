@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 501028d25debc7749857c60cda98dfb4, type: 3}
-  m_Name: Level_3
+  m_Script: {fileID: 11500000, guid: fcd27e931f8acf74dae597f1e474413a, type: 3}
+  m_Name: Card_ 3
   m_EditorClassIdentifier: 
-  W: 3
-  H: 3
+  tag: 3
+  cardPrefab: {fileID: 8232540595703669943, guid: ea9ec5671cc73f84f88109aca58c35d6, type: 3}
+  cardSprite: {fileID: -461620770, guid: d1c2ac46415e7c84495e144c3133d3f1, type: 3}
