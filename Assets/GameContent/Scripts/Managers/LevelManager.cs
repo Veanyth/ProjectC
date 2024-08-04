@@ -49,7 +49,8 @@ public class LevelManager : SingletonMB<LevelManager>
                 break;
             case LevelState.Start:
                 break;
-            case LevelState.Completing:
+            case LevelState.Complete:
+                LevelEndedSaveProgress();
                 break;
         }
         Debug.Log("State Changed " + levelState);
@@ -83,5 +84,8 @@ public class LevelManager : SingletonMB<LevelManager>
         }
     }
 
-
+    private void LevelEndedSaveProgress()
+    {
+        SaveLoadManager.Instance.SaveProgress(GameManager.Instance.CurrentLevelIndex, 2);
+    }
 }

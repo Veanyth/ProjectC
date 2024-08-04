@@ -21,6 +21,8 @@ public class UI_Level : MonoBehaviour
         levelText.text = (levelIndex + 1).ToString();
         levelContainer.localScale = Vector3.zero;
         m_Button.onClick.AddListener(() => PlayLevel());
+
+        LoadProgress();
     }
 
     public void ShowAnimation()
@@ -41,4 +43,20 @@ public class UI_Level : MonoBehaviour
         if (!locked)
             GameManager.Instance.PlayLevel(levelIndex);
     }
+
+    private void LoadProgress()
+    {
+        int starsProgress = SaveLoadManager.Instance.GetStarsForLevel(levelIndex);
+        int levelReached = SaveLoadManager.Instance.GetLevelReached();
+
+        for (int i = 0; i < starsProgress; i++)
+        {
+            stars[i].SetActive(true);
+        }
+
+        bool levelLocked = !(levelIndex <= levelReached);
+        lockedGO.SetActive(levelLocked);
+        locked = levelLocked;
+    }
+
 }
