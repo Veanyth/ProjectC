@@ -99,7 +99,6 @@ public class CardsManager : MonoBehaviour
 
     public void CheckMatchedCards(Card card)
     {
-        Debug.Log("Check Matched Cards");
         if (lastClickedCard == null)
         {
             lastClickedCard = card;
@@ -108,16 +107,21 @@ public class CardsManager : MonoBehaviour
 
         if (lastClickedCard.CardTags == card.CardTags)
         {
-            Debug.Log("Matched");
+            ScoreManager.Instance.MatchesDone(); // Matches
+            ScoreManager.Instance.TryMatchCard(true);
             lastClickedCard.CardMatched();
             card.CardMatched();
+            LevelManager.Instance.CardMatched();
         }
         else
         {
-            Debug.Log("Not Matched");
+            ScoreManager.Instance.BreakCombo();
+            ScoreManager.Instance.TryMatchCard(false);
             lastClickedCard.FlipDownAfterDelay();
             card.FlipDownAfterDelay();
         }
+
+        ScoreManager.Instance.TurnsDone(); // Turns
 
         lastClickedCard = null;
     }

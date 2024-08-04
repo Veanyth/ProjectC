@@ -83,7 +83,6 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("Clicked, _interactable " + _interactable);
         if (_interactable)
         {
             FlipUP();

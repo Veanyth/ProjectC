@@ -5,6 +5,7 @@ public enum LevelState
     Memorize,
     Starting,
     Start,
+    Completing,
     Complete,
 }
 

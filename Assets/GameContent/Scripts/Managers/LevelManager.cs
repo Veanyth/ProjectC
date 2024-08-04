@@ -9,15 +9,16 @@ public class LevelManager : SingletonMB<LevelManager>
     public delegate void OnLevelStateChangedDelegate(LevelState levelState);
     public OnLevelStateChangedDelegate OnLevelStateChangedEvent;
 
-
     public LevelState CurrentLevelState { get; private set; }
 
     private Level_SO levelSO;
     public Level_SO Level_SO { get { return levelSO; } }
 
     private GameManager _gameManager;
-    
 
+    private int cardMatched = 0;
+    private int cardsInLevel;
+    
     protected override void Awake()
     {
         base.Awake();
@@ -28,6 +29,8 @@ public class LevelManager : SingletonMB<LevelManager>
             levelSO = _gameManager.CustomLevel;
         else
             levelSO = _gameManager.Levels[_gameManager.CurrentLevelIndex];
+
+        cardsInLevel = levelSO.H * levelSO.W - ((levelSO.H * levelSO.W) % 2); // exp: grid of (H=5,W=5) = 25, means there is 25 - (25%2) = 24 cards in the game
     }
 
     // We call this method to change the state of the level and trigger the event for any script subscribed to it
@@ -46,7 +49,7 @@ public class LevelManager : SingletonMB<LevelManager>
                 break;
             case LevelState.Start:
                 break;
-            case LevelState.Complete:
+            case LevelState.Completing:
                 break;
         }
         Debug.Log("State Changed " + levelState);
@@ -68,5 +71,17 @@ public class LevelManager : SingletonMB<LevelManager>
 
         ChangeState(LevelState.Starting); // Start flipping the cards
     }
+
+    public void CardMatched()
+    {
+        cardMatched++;
+
+        if (cardMatched >= cardsInLevel / 2)
+        {
+            Debug.Log("Level Complete"); // Level Complete
+            ChangeState(LevelState.Completing);
+        }
+    }
+
 
 }
