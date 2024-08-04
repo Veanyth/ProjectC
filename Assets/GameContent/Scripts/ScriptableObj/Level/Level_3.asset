@@ -15,4 +15,4 @@ MonoBehaviour:
   levelID: 2
   w: 3
   h: 3
-  memorizeTimer: 2
+  memorizeTimer: 5
