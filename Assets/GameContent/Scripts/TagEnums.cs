@@ -6,6 +6,7 @@ public enum LevelState
     Starting,
     Start,
     Completing,
+    Scoring,
     Complete,
 }
 

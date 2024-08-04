@@ -25,6 +25,7 @@ public class ScoreManager : SingletonMB<ScoreManager>
     private int timer = 0;
     private int matches = 0;
     private int turns = 0;
+    private int stars = 0;
     public int Timer { get { return timer; } }
     private Coroutine timerCoroutine;
 

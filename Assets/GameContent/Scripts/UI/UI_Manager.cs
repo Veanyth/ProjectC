@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class UI_Manager : MonoBehaviour
 {
+    [SerializeField] private CanvasGroup backgroundDarkCGrp;
+
     [Header("Memorize Section")]
     [SerializeField] private GameObject memorizeSectionGO;
     [SerializeField] private TextMeshProUGUI memorizeCountdownText;
@@ -37,6 +39,14 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private CanvasGroup comboSectionCGrp;
     [SerializeField] private TextMeshProUGUI comboScoreSectionText;
 
+    [Header("Level Complete Section")]
+    [SerializeField] private GameObject levelSectionGO;
+    [SerializeField] private CanvasGroup levelSectionCGrp;
+
+    [Header("Stars Section")]
+    [SerializeField] private ScoringStar starPrefab;
+    [SerializeField] private Transform[] starHolders = new Transform[3];
+
     private Vector3 initLocalPosMaxCombo;
     private Vector3 initLocalPosComboCombo;
 
@@ -49,6 +59,7 @@ public class UI_Manager : MonoBehaviour
         ScoreManager.Instance.OnComboChangedEvent += OnComboChanged;
         ScoreManager.Instance.OnMaxComboChangedEvent += OnMaxComboChanged;
 
+        backgroundDarkCGrp.gameObject.SetActive(false);
         memorizeSectionGO.SetActive(false);
         startSectionGO.SetActive(false);
         timerSectionGO.SetActive(false);
@@ -56,6 +67,7 @@ public class UI_Manager : MonoBehaviour
         turnsSectionGO.SetActive(false);
         maxComboSectionGO.SetActive(false);
         comboSectionGO.SetActive(false);
+        levelSectionGO.SetActive(false);
 
         maxComboSectionCGrp.alpha = 0;
         comboSectionCGrp.alpha = 0;
@@ -132,7 +144,11 @@ public class UI_Manager : MonoBehaviour
                 ShowMatchesSection();
                 ShowTurnsSection();
                 break;
-            case LevelState.Complete:
+            case LevelState.Completing:
+                StartCoroutine(CompletingPhaseCoroutine());
+                break;
+            case LevelState.Scoring:
+                ShowScoring();
                 break;
         }
     }
@@ -203,4 +219,57 @@ public class UI_Manager : MonoBehaviour
         timerSectionText.text = string.Format("{0:0}:{1:00}", minutes, seconds);
     }
 
+    private IEnumerator CompletingPhaseCoroutine()
+    {
+        backgroundDarkCGrp.gameObject.SetActive(true);
+        backgroundDarkCGrp.DOFade(1, 1f).SetEase(Ease.Linear);
+
+        yield return new WaitForSeconds(2f);
+
+        levelSectionGO.SetActive(true);
+        levelSectionGO.transform.localScale = Vector3.one * 0.5f;
+        levelSectionCGrp.alpha = 0f;
+        levelSectionCGrp.DOFade(1, 0.2f);
+        levelSectionGO.transform.DOScale(Vector3.one, 0.5f);
+
+        yield return new WaitForSeconds(1f);
+
+        LevelManager.Instance.ChangeState(LevelState.Scoring);
+    }
+
+    private void ShowScoring()
+    {
+        int starsCount = 3;
+        StartCoroutine(ShowScoringCoroutine(starsCount));
+    }
+
+    private IEnumerator ShowScoringCoroutine(int starsCount)
+    {
+        for (int i = 0; i < starsCount; i++)
+        {
+            ScoringStar scoringStarTemp = Instantiate(starPrefab, starHolders[i]);
+            scoringStarTemp.Init(starHolders[i], LevelCompleteSectionShake);
+            yield return new WaitForSeconds(0.4f);
+        }
+    }
+
+    public void LevelCompleteSectionShake()
+    {
+        StartCoroutine(ShakeCoroutine());
+    }
+
+    private IEnumerator ShakeCoroutine()
+    {
+        Vector3 initialLocalPosition = levelSectionGO.transform.localPosition;
+        float duration = 0.2f;
+        float strength = 15f;
+        int vibrato = 20;
+        float randomness = 45f;
+
+        levelSectionGO.transform.DOShakePosition(duration, strength, vibrato, randomness, false, true);
+
+        yield return new WaitForSeconds(duration);
+
+        levelSectionGO.transform.localPosition = initialLocalPosition;
+    }
 }
