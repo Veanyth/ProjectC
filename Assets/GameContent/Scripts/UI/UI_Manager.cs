@@ -77,10 +77,7 @@ public class UI_Manager : MonoBehaviour
 
         maxComboSectionCGrp.alpha = 0;
         comboSectionCGrp.alpha = 0;
-
-        // Init current LocalPosition for Combo And MaxCombo (for animations)
-        initLocalPosMaxCombo = maxComboSectionGO.transform.localPosition;
-        initLocalPosComboCombo = comboSectionGO.transform.localPosition;
+      
     }
 
 
