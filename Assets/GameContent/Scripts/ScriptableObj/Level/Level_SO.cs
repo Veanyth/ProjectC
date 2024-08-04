@@ -3,7 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Level_", menuName = "Scriptable Object/Level")]
 public class Level_SO : ScriptableObject
 {
-    [SerializeField] private int w = 2; 
+    [SerializeField] private int levelID;
+    public int LevelID { get { return levelID; } }
+    [SerializeField] private int w = 2;
     [SerializeField] private int h = 2;
     [SerializeField] private float memorizeTimer = 5f;
 

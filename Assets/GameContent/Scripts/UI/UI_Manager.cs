@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Manager : MonoBehaviour
 {
@@ -46,6 +47,10 @@ public class UI_Manager : MonoBehaviour
     [Header("Stars Section")]
     [SerializeField] private ScoringStar starPrefab;
     [SerializeField] private Transform[] starHolders = new Transform[3];
+    [SerializeField] private Button restartLevelBtn;
+    [SerializeField] private Button nextLevelBtn;
+
+
 
     private Vector3 initLocalPosMaxCombo;
     private Vector3 initLocalPosComboCombo;
@@ -59,6 +64,9 @@ public class UI_Manager : MonoBehaviour
         ScoreManager.Instance.OnComboChangedEvent += OnComboChanged;
         ScoreManager.Instance.OnMaxComboChangedEvent += OnMaxComboChanged;
 
+        restartLevelBtn.onClick.AddListener(RestartLevel);
+        nextLevelBtn.onClick.AddListener(NextLevel);
+
         backgroundDarkCGrp.gameObject.SetActive(false);
         memorizeSectionGO.SetActive(false);
         startSectionGO.SetActive(false);
@@ -68,6 +76,8 @@ public class UI_Manager : MonoBehaviour
         maxComboSectionGO.SetActive(false);
         comboSectionGO.SetActive(false);
         levelSectionGO.SetActive(false);
+        restartLevelBtn.gameObject.SetActive(false);
+        nextLevelBtn.gameObject.SetActive(false);
 
         maxComboSectionCGrp.alpha = 0;
         comboSectionCGrp.alpha = 0;
@@ -76,6 +86,7 @@ public class UI_Manager : MonoBehaviour
         initLocalPosMaxCombo = maxComboSectionGO.transform.localPosition;
         initLocalPosComboCombo = comboSectionGO.transform.localPosition;
     }
+
 
     private void OnMatchesChanged(int matches)
     {
@@ -150,6 +161,10 @@ public class UI_Manager : MonoBehaviour
             case LevelState.Scoring:
                 ShowScoring();
                 break;
+            case LevelState.Complete:
+                CompletePhase();
+                break;
+
         }
     }
 
@@ -251,6 +266,10 @@ public class UI_Manager : MonoBehaviour
             scoringStarTemp.Init(starHolders[i], LevelCompleteSectionShake);
             yield return new WaitForSeconds(0.4f);
         }
+
+        yield return new WaitForSeconds(1.5f);
+
+        LevelManager.Instance.ChangeState(LevelState.Complete);
     }
 
     public void LevelCompleteSectionShake()
@@ -271,5 +290,33 @@ public class UI_Manager : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         levelSectionGO.transform.localPosition = initialLocalPosition;
+    }
+
+    private void CompletePhase()
+    {
+        restartLevelBtn.gameObject.SetActive(true);
+        restartLevelBtn.transform.localScale = Vector3.zero;
+        restartLevelBtn.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.Linear);
+
+        bool nextLevelAvailable= GameManager.Instance.CurrentLevelIndex+1 < GameManager.Instance.Levels.Count;
+
+        if (!GameManager.Instance.CustomLevelOn && nextLevelAvailable)
+        {
+            nextLevelBtn.gameObject.SetActive(true);
+            nextLevelBtn.transform.localScale = Vector3.zero;
+            nextLevelBtn.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.Linear);
+        }
+    }
+
+
+    private void NextLevel()
+    {
+        GameManager.Instance.PlayLevel(GameManager.Instance.CurrentLevelIndex + 1);
+    }
+
+    private void RestartLevel()
+    {
+        Debug.Log("works");
+        GameManager.Instance.ReloadScene();
     }
 }

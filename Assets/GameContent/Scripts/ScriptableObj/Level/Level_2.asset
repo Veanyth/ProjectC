@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 501028d25debc7749857c60cda98dfb4, type: 3}
   m_Name: Level_2
   m_EditorClassIdentifier: 
+  levelID: 1
   w: 2
   h: 3
+  memorizeTimer: 5

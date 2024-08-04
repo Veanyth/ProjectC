@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : SingletonMB<GameManager>
 {
@@ -23,10 +24,31 @@ public class GameManager : SingletonMB<GameManager>
 
     public int CardInDBSize { get { return cards.Count; } }
 
+    public void PlayCustomGame(int W,int H)
+    {
+        customLevelOn = true;
+        ChangeCustomLevelValues(W, H);
+        SceneNavigator.Instance.LoadIndexScene(1);
+    }
 
     public void ChangeCustomLevelValues(int W,int H)
     {
         customLevel.W = W;
         customLevel.H = H;
+    }
+
+    public void ReloadScene()
+    {
+        // Get the active scene
+        Scene activeScene = SceneManager.GetActiveScene();
+
+        // Reload the active scene
+        SceneNavigator.Instance.LoadIndexScene(activeScene.buildIndex);
+    }
+
+    public void PlayLevel(int index)
+    {
+        currentLevelIndex = index;
+        SceneNavigator.Instance.LoadIndexScene(1);
     }
 }

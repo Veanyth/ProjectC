@@ -91,7 +91,6 @@ public class ScoreManager : SingletonMB<ScoreManager>
         timerCoroutine = StartCoroutine(TimerCoroutine());
     }
 
-
     private IEnumerator TimerCoroutine()
     {
         timer = 0;
