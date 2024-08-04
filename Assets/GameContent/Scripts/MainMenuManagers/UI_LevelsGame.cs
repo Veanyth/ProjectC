@@ -25,8 +25,6 @@ public class UI_LevelsGame : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("Sjpw a,omation");
-
         ShowLevelsAnimation();
     }
 

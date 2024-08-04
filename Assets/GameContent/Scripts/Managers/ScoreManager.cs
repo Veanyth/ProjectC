@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ScoreManager : SingletonMB<ScoreManager>
@@ -20,12 +21,17 @@ public class ScoreManager : SingletonMB<ScoreManager>
     public OnComboChangedDelegate OnComboChangedEvent;
 
     private float score = 0;
+
     private int currentCombo = 0;
     private int maxCombo = 0;
     private int timer = 0;
     private int matches = 0;
     private int turns = 0;
-    private int stars = 0;
+    private int starsGained;
+    public int StarsGained { get { return starsGained; } }
+    private int starScore1;
+    private int starScore2;
+    private int starScore3;
     public int Timer { get { return timer; } }
     private Coroutine timerCoroutine;
 
@@ -33,6 +39,8 @@ public class ScoreManager : SingletonMB<ScoreManager>
     {
         base.Awake();
         LevelManager.Instance.OnLevelStateChangedEvent += LevelStateChanged;
+
+        CalculateStarScore();
     }
 
     private void LevelStateChanged(LevelState levelState)
@@ -44,8 +52,11 @@ public class ScoreManager : SingletonMB<ScoreManager>
                 break;
             case LevelState.Completing:
                 StopTimer();
+                break;
+            case LevelState.Scoring:
                 CalculateScore();
                 break;
+
         }
     }
 
@@ -114,6 +125,26 @@ public class ScoreManager : SingletonMB<ScoreManager>
 
     private void CalculateScore()
     {
+      
+        score = timer + ((turns - matches) * 10); // for every mistake we add 10sec to the timer, this will be the score
 
+        if (score < starScore3)
+            starsGained = 3;
+        else
+            if (score < starScore2)
+            starsGained = 2;
+        else
+            if (score < starScore1)
+            starsGained = 1;
+        else
+            starsGained = 0;
+    }
+
+    private void CalculateStarScore()
+    {
+        int levelGridSize = LevelManager.Instance.Level_SO.W * LevelManager.Instance.Level_SO.H;
+        starScore1 = (levelGridSize / 4) * 15;  // as the size of the grid increases we dynamically increase the score for the stars to make it fair for the player
+        starScore2 = (levelGridSize / 4) * 10;
+        starScore3 = (levelGridSize / 4) * 5;
     }
 }

@@ -15,8 +15,12 @@ public class SaveLoadManager : SingletonMB<SaveLoadManager>
             PlayerPrefs.SetInt(LevelReachedKey, levelIndex);
         }
 
-        string starsKey = LevelStarsKey + levelIndex;
-        PlayerPrefs.SetInt(starsKey, stars);
+        int currentLevelStars = GetStarsForLevel(levelIndex);
+        if (stars > currentLevelStars)
+        {
+            string starsKey = LevelStarsKey + levelIndex;
+            PlayerPrefs.SetInt(starsKey, stars);
+        }
 
         PlayerPrefs.Save();
     }
@@ -24,12 +28,12 @@ public class SaveLoadManager : SingletonMB<SaveLoadManager>
     public int GetStarsForLevel(int levelIndex)
     {
         string starsKey = LevelStarsKey + levelIndex;
-        return PlayerPrefs.GetInt(starsKey, 0); 
+        return PlayerPrefs.GetInt(starsKey, 0);
     }
 
     public int GetLevelReached()
     {
-        return PlayerPrefs.GetInt(LevelReachedKey, 0); 
+        return PlayerPrefs.GetInt(LevelReachedKey, 0);
     }
 
     public void ResetProgress()

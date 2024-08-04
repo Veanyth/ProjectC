@@ -36,7 +36,6 @@ public class LevelManager : SingletonMB<LevelManager>
     // We call this method to change the state of the level and trigger the event for any script subscribed to it
     public void ChangeState(LevelState levelState)
     {
-        Debug.Log("Try to change state " + levelState);
         if (CurrentLevelState == levelState) return;
 
         CurrentLevelState = levelState;
@@ -53,8 +52,6 @@ public class LevelManager : SingletonMB<LevelManager>
                 LevelEndedSaveProgress();
                 break;
         }
-        Debug.Log("State Changed " + levelState);
-
     }
 
     private void MemorizePhase()
@@ -86,6 +83,7 @@ public class LevelManager : SingletonMB<LevelManager>
 
     private void LevelEndedSaveProgress()
     {
-        SaveLoadManager.Instance.SaveProgress(GameManager.Instance.CurrentLevelIndex, 2);
+
+        SaveLoadManager.Instance.SaveProgress(GameManager.Instance.CurrentLevelIndex, ScoreManager.Instance.StarsGained);
     }
 }

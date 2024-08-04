@@ -143,7 +143,6 @@ public class UI_Manager : MonoBehaviour
 
     private void LevelStateChanged(LevelState levelState)
     {
-        Debug.Log("levelState changed" + levelState);
         switch (levelState)
         {
             case LevelState.Memorize:
@@ -254,7 +253,7 @@ public class UI_Manager : MonoBehaviour
 
     private void ShowScoring()
     {
-        int starsCount = 3;
+        int starsCount = ScoreManager.Instance.StarsGained;
         StartCoroutine(ShowScoringCoroutine(starsCount));
     }
 

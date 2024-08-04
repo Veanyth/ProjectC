@@ -22,7 +22,6 @@ public class UI_MenuSelection : MonoBehaviour
 
     private void SelectMenu(int id)
     {
-        Debug.Log("Button Clicked " + id);
         for (int i = 0; i < menus.Count; i++)
         {
             if (i == id)
