@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CardsManager : MonoBehaviour
 {
+    [SerializeField] private AudioClip cardMatch;
+    [SerializeField] private AudioClip cardMisaatch;
     private TableManager _tableManager;
 
     private Dictionary<int, Card> CardsDict = new Dictionary<int, Card>();
@@ -112,6 +114,7 @@ public class CardsManager : MonoBehaviour
             lastClickedCard.CardMatched();
             card.CardMatched();
             LevelManager.Instance.CardMatched();
+            SoundManager.Instance.PlaySFX(cardMatch);
         }
         else
         {
@@ -119,6 +122,8 @@ public class CardsManager : MonoBehaviour
             ScoreManager.Instance.TryMatchCard(false);
             lastClickedCard.FlipDownAfterDelay();
             card.FlipDownAfterDelay();
+            SoundManager.Instance.PlaySFX(cardMisaatch);
+
         }
 
         ScoreManager.Instance.TurnsDone(); // Turns

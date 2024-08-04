@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class UI_Manager : MonoBehaviour
 {
     [SerializeField] private CanvasGroup backgroundDarkCGrp;
+    [SerializeField] private AudioClip levelCompleteSFX;
 
     [Header("Memorize Section")]
     [SerializeField] private GameObject memorizeSectionGO;
@@ -240,6 +241,7 @@ public class UI_Manager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
+        SoundManager.Instance.PlaySFX(levelCompleteSFX);
         levelSectionGO.SetActive(true);
         levelSectionGO.transform.localScale = Vector3.one * 0.5f;
         levelSectionCGrp.alpha = 0f;
@@ -297,7 +299,7 @@ public class UI_Manager : MonoBehaviour
         restartLevelBtn.transform.localScale = Vector3.zero;
         restartLevelBtn.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.Linear);
 
-        bool nextLevelAvailable= GameManager.Instance.CurrentLevelIndex+1 < GameManager.Instance.Levels.Count;
+        bool nextLevelAvailable = GameManager.Instance.CurrentLevelIndex + 1 < GameManager.Instance.Levels.Count;
 
         if (!GameManager.Instance.CustomLevelOn && nextLevelAvailable)
         {

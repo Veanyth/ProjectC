@@ -84,6 +84,7 @@ public class LevelManager : SingletonMB<LevelManager>
     private void LevelEndedSaveProgress()
     {
 
-        SaveLoadManager.Instance.SaveProgress(GameManager.Instance.CurrentLevelIndex, ScoreManager.Instance.StarsGained);
+        SaveLoadManager.Instance.SaveStarsProgress(GameManager.Instance.CurrentLevelIndex, ScoreManager.Instance.StarsGained);
+        SaveLoadManager.Instance.SaveLevelReached(GameManager.Instance.CurrentLevelIndex+1);
     }
 }

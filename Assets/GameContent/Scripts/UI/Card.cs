@@ -8,10 +8,12 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour, IPointerClickHandler
 {
+    [SerializeField] private GameObject cardSelectedGO;
     [SerializeField] private RectTransform frontPanel;
     [SerializeField] private RectTransform backPanel;
 
     [SerializeField] private Image cardImage;
+    [SerializeField] private AudioClip flipCardSFX;
     [SerializeField] private int _id;
     public int ID { get { return _id; } }
     private CardTags cardTags;
@@ -56,6 +58,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     public void FlipDownAfterDelay()
     {
+        cardSelectedGO.SetActive(false);
         StartCoroutine(FlipDownAfterDelayCoroutine());
     }
 
@@ -70,6 +73,8 @@ public class Card : MonoBehaviour, IPointerClickHandler
 
     public void FlipUP()
     {
+        SoundManager.Instance.PlaySFX(flipCardSFX);
+
         ChangeInteractability(false);
         transform.DOLocalMoveY(initialYLocalPos + 10f, 0.2f).OnComplete(() =>
         transform.DOLocalMoveY(initialYLocalPos, 0.2f));
@@ -85,6 +90,7 @@ public class Card : MonoBehaviour, IPointerClickHandler
     {
         if (_interactable)
         {
+            cardSelectedGO.SetActive(true);
             FlipUP();
             CheckMatchedCards(this);
         }
