@@ -51,11 +51,6 @@ public class UI_Manager : MonoBehaviour
     [SerializeField] private Button restartLevelBtn;
     [SerializeField] private Button nextLevelBtn;
 
-
-
-    private Vector3 initLocalPosMaxCombo;
-    private Vector3 initLocalPosComboCombo;
-
     private void Awake()
     {
         LevelManager.Instance.OnLevelStateChangedEvent += LevelStateChanged;
@@ -109,10 +104,10 @@ public class UI_Manager : MonoBehaviour
         {
             if (!comboSectionGO.activeSelf) // if combo showing for the first time or showing again, we play animation
             {
-                comboSectionCGrp.alpha = 0;
-                comboSectionGO.transform.localPosition = new Vector3(initLocalPosComboCombo.x - 350f, initLocalPosComboCombo.y, initLocalPosComboCombo.z);
                 comboSectionGO.SetActive(true);
-                comboSectionGO.transform.DOLocalMoveX(initLocalPosComboCombo.x, 0.3f);
+                comboSectionCGrp.alpha = 0;
+                comboSectionGO.transform.localPosition = new Vector3(comboSectionGO.transform.localPosition.x - 350f, comboSectionGO.transform.localPosition.y, comboSectionGO.transform.localPosition.z);
+                comboSectionGO.transform.DOLocalMoveX(comboSectionGO.transform.localPosition.x+350, 0.3f);
                 comboSectionCGrp.DOFade(1, 0.15f);
             }
 
@@ -131,10 +126,10 @@ public class UI_Manager : MonoBehaviour
         {
             if (!maxComboSectionGO.activeSelf) // if max combo showing for the first time we play animation
             {
-                maxComboSectionCGrp.alpha = 0;
-                maxComboSectionGO.transform.localPosition = new Vector3(initLocalPosMaxCombo.x - 250f, initLocalPosMaxCombo.y, initLocalPosMaxCombo.z);
                 maxComboSectionGO.SetActive(true);
-                maxComboSectionGO.transform.DOLocalMoveX(initLocalPosMaxCombo.x, 0.3f);
+                maxComboSectionCGrp.alpha = 0;
+                maxComboSectionGO.transform.localPosition = new Vector3(maxComboSectionGO.transform.localPosition.x - 250f, maxComboSectionGO.transform.localPosition.y, maxComboSectionGO.transform.localPosition.z);
+                maxComboSectionGO.transform.DOLocalMoveX(maxComboSectionGO.transform.localPosition.x+250, 0.3f);
                 maxComboSectionCGrp.DOFade(1, 0.15f);
             }
 
